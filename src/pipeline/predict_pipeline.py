@@ -5,7 +5,7 @@ from src.utils import load_obj
 
 
 
-class PredictPipline:
+class PredictPipeline:
     def __init__(self):
         pass
     
