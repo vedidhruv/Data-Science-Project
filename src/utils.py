@@ -26,7 +26,6 @@ def evaluate_model(X_train, Y_train,X_test,Y_test,models, params):
             gs = GridSearchCV(model, param, cv=3)
             gs.fit(X_train, Y_train)
             
-            print(gs.best_params_)
             model.set_params(**gs.best_params_)
             model.fit(X_train, Y_train)
             
@@ -35,8 +34,14 @@ def evaluate_model(X_train, Y_train,X_test,Y_test,models, params):
             test_model_score = r2_score(Y_test, Y_test_pred)
 
             report[list(models.keys())[i]] = test_model_score
-        print(report)
         return report
 
+    except Exception as e:
+        raise CustomException(e, sys)
+
+def load_obj(file_path):
+    try:
+        with open(file_path, 'rb') as f:
+            return dill.load(f)
     except Exception as e:
         raise CustomException(e, sys)
