@@ -43,10 +43,13 @@ class DataTransformation:
                 steps=[
                     ('imputer', SimpleImputer(strategy='most_frequent')),
                     ('one_hot_encoder', OneHotEncoder()),
-                    ('std_scaler', StandardScaler())
+                    ('std_scaler', StandardScaler(with_mean=False))
                 ]
             )
-            logging.info("Categorical and numerical pipelines created")
+            
+            logging.info(f'Categorical Features: {categorical_features}')
+            logging.info(f'Numerical Features: {numerical_features}')
+            
             preprocessor = ColumnTransformer(
                 [
                     ("nump_pipeline", num_pipeline, numerical_features),
@@ -78,8 +81,8 @@ class DataTransformation:
             
             logging.info(f"Applying preprocessing object on train dataframe and test dataframe")
             
-            input_feature_train_arr = train_df.drop(columns=[target_column_name], axis=1)
-            input_feature_test_arr = test_df[target_column_name]
+            input_feature_train_arr=preprocessing_object.fit_transform(input_feature_train_df)
+            input_feature_test_arr=preprocessing_object.transform(input_feature_test_df)
             
             train_arr = np.c_[input_feature_train_arr, np.array(target_features_train_df)]
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
